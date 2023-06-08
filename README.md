@@ -13,7 +13,7 @@ From class [BIMM143](https://bioboot.github.io/bimm143_S23/)
 
 - Class 10: **Structural Bioinformatics II** [source code](https://github.com/sejalpatel529/bimm143/blob/main/Class%2010/Class10.qmd)
 
-- Class 11: **Galaxy**(https://github.com/sejalpatel529/bimm143/blob/main/Class%208/Class%208.pdf)[source code](https://github.com/sejalpatel529/bimm143/blob/main/Class%2011/class11.qmd)
+- Class 11: [**Galaxy**](https://github.com/sejalpatel529/bimm143/blob/main/Class%208/Class%208.pdf)[source code](https://github.com/sejalpatel529/bimm143/blob/main/Class%2011/class11.qmd)
 
 
 
