@@ -1,0 +1,247 @@
+---
+title: "Class 11: Halloween Mini Lab"
+author: "Sejal Patel"
+format: html
+---
+
+
+```{r}
+candy <- read.csv("https://raw.githubusercontent.com/fivethirtyeight/data/master/candy-power-ranking/candy-data.csv", row.names=1)
+head(candy)
+```
+
+> Q1. how mnay different candy types are there in this data set? 
+
+```{r}
+dim(candy)
+```
+
+> Q2. How many fruity candy types are in the dataset?
+
+```{r}
+sum(candy$fruity)
+```
+
+What are these fruity candies? 
+
+```{r}
+rownames(candy[ candy$fruity == 1, ])
+```
+
+## How often does my favorite candy win
+
+```{r}
+candy["Milky Way Midnight", ]$winpercent
+```
+
+> What is the winpercent for "kit kat"?
+
+```{r}
+candy["Kit Kat", ]$winpercent
+```
+
+```{r}
+skimr::skim(candy)
+
+```
+
+> Q6. Is there any variable/column that looks to be on a different scale to the majority of the other columns in the dataset?
+
+"Winpercent" It is on a 0:100 scale and all others appears to be on a 0:1 scale. 
+
+> Q7. What do you think a zero and one represent for the candy$chocolate column?
+
+Zero means that candy is not classfied as chocolate and one means it is. 
+
+> Q8. Plot a histogram of winpercent values
+
+```{r}
+hist(candy$winpercent)
+```
+
+```{r}
+library(ggplot2)
+
+ggplot(candy)+ 
+  aes(winpercent)+
+  geom_histogram(bins=10)
+```
+
+> Q9. Is the distribution of winpercent values symmetrical?
+
+No.
+
+> Q10. Is the center of the distribution above or below 50%?
+
+Below 50%
+
+> Q11. On average is chocolate candy higher or lower ranked than fruit candy?
+
+```{r}
+mean(candy$winpercent)
+```
+
+1. Filer and select to just fruity rows
+2. Get their winpercent values
+3. Calculate their mean winpercent values
+```{r}
+fruity.winpercent <- mean(candy$winpercent[as.logical(candy$fruity)])
+fruity.winpercent
+```
+
+```{r}
+chocolate.candy <- candy[as.logical(candy$chocolate), ]
+chocolate.winpercent <- chocolate.candy$winpercent
+mean(chocolate.winpercent)
+```
+
+> Q12. Is this difference statistically significant?
+
+```{r}
+"t.test(chocolate.winpercent, fruity.winpercent)"
+```
+
+
+##Overall Candy Rankings
+
+> Q13. What are the five least liked candy types in this set?
+
+There is a base R function called `sort()` for, guess what sorting vectors of input. 
+
+```{r}
+x <- c(5, 2, 10)
+
+sort(x, decreasing = TRUE)
+```
+
+The buddy function to `sort()` that is often more useful is called `order()`. It returns the indices of the input that would result in it being sorted. 
+
+```{r}
+order(x)
+x[ order (x)]
+```
+
+I can order by `winpercent`
+
+```{r}
+ord <- order(candy$winpercent)
+candy[ord,]
+```
+
+>Q14. What are the top 5 all time favorite candy types out of this set?
+
+```{r}
+ord <- order(candy$winpercent, decreasing = TRUE)
+head( candy [ord,], 5)
+```
+
+> Q15. Make a first barplot of candy ranking based on winpercent values.
+
+```{r}
+library(ggplot2)
+
+ggplot(candy) + 
+  aes(winpercent, reorder(rownames(candy),winpercent))+ 
+  geom_col()
+```
+```{r}
+my_cols=rep("black", nrow(candy))
+my_cols[as.logical(candy$chocolate)] = "chocolate"
+my_cols[as.logical(candy$bar)] = "brown"
+my_cols[as.logical(candy$fruity)] = "pink"
+```
+
+```{r}
+ggplot(candy) + 
+  aes(winpercent, reorder(rownames(candy),winpercent)) +
+  geom_col(fill=my_cols)
+```
+> Q17. What is the worst ranked chocolate candy?
+
+Sixlet
+
+> Q18. What is the best ranked fruity candy?
+
+Starburst
+
+> What is the best candy for the least money? 
+
+```{r}
+
+```
+
+
+```{r}
+ggplot(candy)+ 
+  aes(winpercent, pricepercent)+
+  geom_point(col=my_cols)
+```
+
+
+Add some labels
+
+```{r}
+ggplot(candy)+ 
+  aes(winpercent, pricepercent, label= rownames(candy))+
+  geom_point(col=my_cols) +
+  geom_text()
+
+```
+
+To deal with overlapping labels I can use the **geom_repel** package. 
+
+```{r}
+library(ggrepel)
+
+ggplot(candy)+ 
+  aes(winpercent, pricepercent, label= rownames(candy))+
+  geom_point(col=my_cols) +
+  geom_text_repel(col=my_cols, size=3.3, max.overlaps = 5)
+```
+ 
+# 5 Exploring correlation structure
+
+Pearson correlation goes between -1 and +1 with zero indicating no correlation and vlaues close to one being very highly correlated. 
+
+```{r}
+library(corrplot)
+
+cij <- cor(candy)
+corrplot(cij)
+```
+
+> Q22. Examining this plot what two variables are anti-correlated (i.e. have minus values)?
+
+Chocolate and fruit are anti correlated. 
+
+> Q23. Similarly, what two variables are most positively correlated?
+
+Chocolate and winpercent or chocolate and bar. 
+
+# 6. Principal Component Analysis
+
+The base R function for PCA is called `prcomp()` and we can set "scale=TRUE/FALSE". 
+
+```{r}
+pca <- prcomp(candy, scale=TRUE)
+summary (pca)
+```
+
+The main result of PCA - i.e the new PC plot (projection of candy on our new PC axis) is contained in `pca$x`. 
+
+```{r}
+pc <- as.data.frame(pca$x)
+
+ggplot(pc)+
+  aes(PC1, PC2, label=row.names(pc))+
+  geom_point(col=my_cols) #+ geom_text_repel(max.overlaps = 5)
+  
+```
+
+```{r}
+par(mar=c(8,4,2,2))
+barplot(pca$rotation[,1], las=2, ylab="PC1 Contribution")
+```
+> Q24. What original variables are picked up strongly by PC1 in the positive direction? Do these make sense to you?
+
+Fruity, Hard and Pluribus. These make sense to me because they are the ones that are the most postively correlated in the PC1 direction, and so fruity, hard, and pluribus the most correlated to those candies. 

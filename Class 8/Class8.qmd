@@ -1,0 +1,166 @@
+---
+title: "Class 8"
+format: html
+---
+
+# Breast Cancer Project
+
+Today we are going to explore some data fromm the University of Wisconsin Cancer Center on Breast Cancer biopsy data. 
+
+```{r}
+wisc.data <- read.csv("WisconsinCancer.csv", row.names=1)
+head(wisc.data)
+```
+
+> Q. How many patient samples are in this dataset? 
+569 patient samples. 
+
+```{r}
+nrow(wisc.data)
+```
+
+> Q. How many cancer (M) and non cancer (B) samples are there? 
+
+```{r}
+table(wisc.data$diagnosis)
+```
+
+Save the diagnosis for later use as a reference to compare how well how well we do with PCA etc. 
+
+```{r}
+diagnosis <- as.factor(wisc.data$diagnosis)
+#diagnosis
+```
+
+Now exclude the diagnosis column from the data 
+
+```{r}
+wisc <- wisc.data[,-1]
+```
+
+
+> Q. How many "dimensions", "variables", "columns" are there in this dataset?  
+
+```{r}
+dim(wisc)
+```
+
+#Principal Component Analysis (PCA)
+
+To perform PCA in R we can use the 'prcomp()' function. It takes as input a numeric dataset and optional 'scale=FALSE/TRUE' argument. 
+
+We generally always want to set `scale=TRUE` but lets makes sure by checking is the mean and standard deviation values are different across these 30 columns. 
+
+```{r}
+round(colMeans(wisc))
+```
+
+```{r}
+pca <-prcomp(wisc, scale=T)
+summary(pca)
+```
+
+```{r}
+attributes(pca)
+```
+
+```{r}
+plot(pca$x[,1], pca$x[,2], col=diagnosis)
+```
+
+> Q. How much variance is captured in the top 3 PCs. 
+
+They capture 76% of the total variance. 
+
+> Q9. For the first principal component, what is the component of the loading vector (i.e. wisc.pr$rotation[,1]) for the feature concave.points_mean? This tells us how much this original feature contributes to the first PC.
+
+```{r}
+pca$rotation
+```
+
+```{r}
+pca$rotation["concave.points_mean", 1]
+```
+
+```{r}
+attributes(pca)
+```
+
+#Combine PCA results with clustering. 
+
+We can use our new PCA variables (i.e. the socres along the PCs comtained in the t `pca$x`) as input for outher mothds such as clustering. 
+
+```{r}
+d <- dist(pca$x[,1:3])
+
+hc <-hclust(d, method="ward.D2")
+plot(hc)
+```
+To get our cluster membership vector we can use the `cutree()` function and specify a height (`h`) or number of groups (`k`).
+
+```{r}
+grps <- cutree(hc, h=80)
+table(grps)
+```
+
+ I want to find out how many diagnosis "M" and "B" are in each grp? 
+ 
+```{r}
+table(diagnosis)
+```
+ 
+
+```{r}
+table(diagnosis, grps)
+```
+
+We can also plot our results using clustering vector `grps`. 
+
+```{r}
+plot(pca$x[,1], pca$x[,2], col=grps)
+```
+
+> Q.15 What is the specificity and sesitivity of our current results? 
+
+Sensitivity group one
+```{r}
+grp1sen <-179/(179+33)
+grp1sen
+```
+
+Sensitivity group 2: 
+```{r}
+grp2sen <-33/(179+33)
+grp2sen
+```
+
+
+Sepeficity group one: 
+```{r}
+grp1spec <- 24/(24+333)
+grp1spec
+```
+
+Specifcity group two:
+```{r}
+grp2spec <- 333/(24+333)
+grp2spec
+```
+
+> Q16. Which of these new patients should we prioritize for follow up based on your results?
+
+```{r}
+#url <- "new_samples.csv"
+url <- "https://tinyurl.com/new-samples-CSV"
+new <- read.csv(url)
+npc <- predict(pca, newdata=new)
+npc
+```
+
+
+```{r}
+plot(pca$x[,1:2], col=diagnosis)
+points(npc[,1], npc[,2], col="blue", pch=16, cex=3)
+text(npc[,1], npc[,2], c(1,2), col="white")
+```
+

@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Sejal Patel">
+
+<title>RNA-Seq analysis mini project</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="RNASeq Miniproject_files/libs/clipboard/clipboard.min.js"></script>
+<script src="RNASeq Miniproject_files/libs/quarto-html/quarto.js"></script>
+<script src="RNASeq Miniproject_files/libs/quarto-html/popper.min.js"></script>
+<script src="RNASeq Miniproject_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="RNASeq Miniproject_files/libs/quarto-html/anchor.min.js"></script>
+<link href="RNASeq Miniproject_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="RNASeq Miniproject_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="RNASeq Miniproject_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="RNASeq Miniproject_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="RNASeq Miniproject_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">RNA-Seq analysis mini project</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Sejal Patel </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DESeq2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: S4Vectors</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: stats4</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: BiocGenerics</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'BiocGenerics'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    IQR, mad, sd, var, xtabs</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    anyDuplicated, aperm, append, as.data.frame, basename, cbind,
+    colnames, dirname, do.call, duplicated, eval, evalq, Filter, Find,
+    get, grep, grepl, intersect, is.unsorted, lapply, Map, mapply,
+    match, mget, order, paste, pmax, pmax.int, pmin, pmin.int,
+    Position, rank, rbind, Reduce, rownames, sapply, setdiff, sort,
+    table, tapply, union, unique, unsplit, which.max, which.min</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'S4Vectors'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    expand.grid, I, unname</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: IRanges</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: GenomicRanges</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: GenomeInfoDb</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: SummarizedExperiment</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: MatrixGenerics</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: matrixStats</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'MatrixGenerics'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:matrixStats':
+
+    colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,
+    colCounts, colCummaxs, colCummins, colCumprods, colCumsums,
+    colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,
+    colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,
+    colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,
+    colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,
+    colWeightedMeans, colWeightedMedians, colWeightedSds,
+    colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,
+    rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,
+    rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,
+    rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,
+    rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,
+    rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,
+    rowWeightedMads, rowWeightedMeans, rowWeightedMedians,
+    rowWeightedSds, rowWeightedVars</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: Biobase</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'Biobase'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:MatrixGenerics':
+
+    rowMedians</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:matrixStats':
+
+    anyMissing, rowMedians</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>countData <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"GSE37704_featurecounts.csv"</span>, <span class="at">row.names=</span><span class="dv">1</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>colData <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"GSE37704_metadata.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(countData)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                length SRR493366 SRR493367 SRR493368 SRR493369 SRR493370
+ENSG00000186092    918         0         0         0         0         0
+ENSG00000279928    718         0         0         0         0         0
+ENSG00000279457   1982        23        28        29        29        28
+ENSG00000278566    939         0         0         0         0         0
+ENSG00000273547    939         0         0         0         0         0
+ENSG00000187634   3214       124       123       205       207       212
+                SRR493371
+ENSG00000186092         0
+ENSG00000279928         0
+ENSG00000279457        46
+ENSG00000278566         0
+ENSG00000273547         0
+ENSG00000187634       258</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(colData)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         id     condition
+1 SRR493366 control_sirna
+2 SRR493367 control_sirna
+3 SRR493368 control_sirna
+4 SRR493369      hoxa1_kd
+5 SRR493370      hoxa1_kd
+6 SRR493371      hoxa1_kd</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>countData <span class="ot">&lt;-</span> countData[,<span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(countData)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                SRR493366 SRR493367 SRR493368 SRR493369 SRR493370 SRR493371
+ENSG00000186092         0         0         0         0         0         0
+ENSG00000279928         0         0         0         0         0         0
+ENSG00000279457        23        28        29        29        28        46
+ENSG00000278566         0         0         0         0         0         0
+ENSG00000273547         0         0         0         0         0         0
+ENSG00000187634       124       123       205       207       212       258</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>zerocounts <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(countData) <span class="sc">&gt;</span><span class="dv">0</span> </span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(zerocounts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ENSG00000186092 ENSG00000279928 ENSG00000279457 ENSG00000278566 ENSG00000273547 
+          FALSE           FALSE            TRUE           FALSE           FALSE 
+ENSG00000187634 
+           TRUE </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>newcounts <span class="ot">&lt;-</span> countData[zerocounts,]</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(countData)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                SRR493366 SRR493367 SRR493368 SRR493369 SRR493370 SRR493371
+ENSG00000186092         0         0         0         0         0         0
+ENSG00000279928         0         0         0         0         0         0
+ENSG00000279457        23        28        29        29        28        46
+ENSG00000278566         0         0         0         0         0         0
+ENSG00000273547         0         0         0         0         0         0
+ENSG00000187634       124       123       205       207       212       258</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DESeq2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeqDataSetFromMatrix</span>(<span class="at">countData=</span>newcounts,</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">colData=</span>colData,</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">design=</span><span class="sc">~</span>condition)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in DESeqDataSet(se, design = design, ignoreRank): some variables in
+design formula are characters, converting to factors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeq</span>(dds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>estimating size factors</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>estimating dispersions</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>gene-wise dispersion estimates</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>mean-dispersion relationship</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>final dispersion estimates</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>fitting model and testing</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> DESeq2<span class="sc">::</span><span class="fu">results</span>(dds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="annotate-results" class="level2">
+<h2 class="anchored" data-anchor-id="annotate-results">Annotate results</h2>
+<p>I need to add annotation to my results including gene symbols and entrzids etc. For this I will use the <strong>AnnotationDBi</strong> package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(AnnotationDbi)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"org.Hs.eg.db"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code></code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">columns</span>(org.Hs.eg.db)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "ACCNUM"       "ALIAS"        "ENSEMBL"      "ENSEMBLPROT"  "ENSEMBLTRANS"
+ [6] "ENTREZID"     "ENZYME"       "EVIDENCE"     "EVIDENCEALL"  "GENENAME"    
+[11] "GENETYPE"     "GO"           "GOALL"        "IPI"          "MAP"         
+[16] "OMIM"         "ONTOLOGY"     "ONTOLOGYALL"  "PATH"         "PFAM"        
+[21] "PMID"         "PROSITE"      "REFSEQ"       "SYMBOL"       "UCSCKG"      
+[26] "UNIPROT"     </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>res<span class="sc">$</span>symbol <span class="ot">=</span> <span class="fu">mapIds</span>(org.Hs.eg.db,</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">keys=</span> <span class="fu">rownames</span>(res), </span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">keytype=</span><span class="st">"ENSEMBL"</span>,</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">column=</span> <span class="st">"SYMBOL"</span>,</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">multiVals=</span><span class="st">"first"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>'select()' returned 1:many mapping between keys and columns</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>res<span class="sc">$</span>entrez <span class="ot">=</span> <span class="fu">mapIds</span>(org.Hs.eg.db,</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">keys=</span> <span class="fu">row.names</span>(res),</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">keytype=</span><span class="st">"ENSEMBL"</span>,</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">column=</span><span class="st">"ENTREZID"</span>,</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">multiVals=</span><span class="st">"first"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>'select()' returned 1:many mapping between keys and columns</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>res<span class="sc">$</span>name <span class="ot">=</span>   <span class="fu">mapIds</span>(org.Hs.eg.db,</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">keys=</span><span class="fu">row.names</span>(res),</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">keytype=</span><span class="st">"ENSEMBL"</span>,</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">column=</span> <span class="st">"GENENAME"</span>,</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">multiVals=</span><span class="st">"first"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>'select()' returned 1:many mapping between keys and columns</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>res <span class="ot">=</span> res[<span class="fu">order</span>(res<span class="sc">$</span>pvalue),]</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(res, <span class="at">file=</span><span class="st">"deseq_results.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pathview)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>##############################################################################
+Pathview is an open source software package distributed under GNU General
+Public License version 3 (GPLv3). Details of GPLv3 is available at
+http://www.gnu.org/licenses/gpl-3.0.html. Particullary, users are required to
+formally cite the original Pathview paper (not just mention it) in publications
+or products. For details, do citation("pathview") within R.
+
+The pathview downloads and uses KEGG data. Non-academic uses may require a KEGG
+license agreement (details at http://www.kegg.jp/kegg/legal.html).
+##############################################################################</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gage)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code></code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gageData)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(kegg.sets.hs)</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(sigmet.idx.hs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>kegg.sets.hs <span class="ot">=</span> kegg.sets.hs[sigmet.idx.hs]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(kegg.sets.hs, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$`hsa00232 Caffeine metabolism`
+[1] "10"   "1544" "1548" "1549" "1553" "7498" "9"   
+
+$`hsa00983 Drug metabolism - other enzymes`
+ [1] "10"     "1066"   "10720"  "10941"  "151531" "1548"   "1549"   "1551"  
+ [9] "1553"   "1576"   "1577"   "1806"   "1807"   "1890"   "221223" "2990"  
+[17] "3251"   "3614"   "3615"   "3704"   "51733"  "54490"  "54575"  "54576" 
+[25] "54577"  "54578"  "54579"  "54600"  "54657"  "54658"  "54659"  "54963" 
+[33] "574537" "64816"  "7083"   "7084"   "7172"   "7363"   "7364"   "7365"  
+[41] "7366"   "7367"   "7371"   "7372"   "7378"   "7498"   "79799"  "83549" 
+[49] "8824"   "8833"   "9"      "978"   
+
+$`hsa00230 Purine metabolism`
+  [1] "100"    "10201"  "10606"  "10621"  "10622"  "10623"  "107"    "10714" 
+  [9] "108"    "10846"  "109"    "111"    "11128"  "11164"  "112"    "113"   
+ [17] "114"    "115"    "122481" "122622" "124583" "132"    "158"    "159"   
+ [25] "1633"   "171568" "1716"   "196883" "203"    "204"    "205"    "221823"
+ [33] "2272"   "22978"  "23649"  "246721" "25885"  "2618"   "26289"  "270"   
+ [41] "271"    "27115"  "272"    "2766"   "2977"   "2982"   "2983"   "2984"  
+ [49] "2986"   "2987"   "29922"  "3000"   "30833"  "30834"  "318"    "3251"  
+ [57] "353"    "3614"   "3615"   "3704"   "377841" "471"    "4830"   "4831"  
+ [65] "4832"   "4833"   "4860"   "4881"   "4882"   "4907"   "50484"  "50940" 
+ [73] "51082"  "51251"  "51292"  "5136"   "5137"   "5138"   "5139"   "5140"  
+ [81] "5141"   "5142"   "5143"   "5144"   "5145"   "5146"   "5147"   "5148"  
+ [89] "5149"   "5150"   "5151"   "5152"   "5153"   "5158"   "5167"   "5169"  
+ [97] "51728"  "5198"   "5236"   "5313"   "5315"   "53343"  "54107"  "5422"  
+[105] "5424"   "5425"   "5426"   "5427"   "5430"   "5431"   "5432"   "5433"  
+[113] "5434"   "5435"   "5436"   "5437"   "5438"   "5439"   "5440"   "5441"  
+[121] "5471"   "548644" "55276"  "5557"   "5558"   "55703"  "55811"  "55821" 
+[129] "5631"   "5634"   "56655"  "56953"  "56985"  "57804"  "58497"  "6240"  
+[137] "6241"   "64425"  "646625" "654364" "661"    "7498"   "8382"   "84172" 
+[145] "84265"  "84284"  "84618"  "8622"   "8654"   "87178"  "8833"   "9060"  
+[153] "9061"   "93034"  "953"    "9533"   "954"    "955"    "956"    "957"   
+[161] "9583"   "9615"  </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>foldchanges <span class="ot">=</span> res<span class="sc">$</span>log2FoldChange</span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(foldchanges) <span class="ot">=</span> res<span class="sc">$</span>entrez</span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(foldchanges)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     1266     54855      1465     51232      2034      2317 
+-2.422719  3.201955 -2.313738 -2.059631 -1.888019 -1.649792 </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>keggres <span class="ot">=</span> <span class="fu">gage</span>(foldchanges, <span class="at">gsets=</span>kegg.sets.hs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attributes</span>(keggres)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$names
+[1] "greater" "less"    "stats"  </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(keggres<span class="sc">$</span>less)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                         p.geomean stat.mean        p.val
+hsa04110 Cell cycle                   8.995727e-06 -4.378644 8.995727e-06
+hsa03030 DNA replication              9.424076e-05 -3.951803 9.424076e-05
+hsa03013 RNA transport                1.375901e-03 -3.028500 1.375901e-03
+hsa03440 Homologous recombination     3.066756e-03 -2.852899 3.066756e-03
+hsa04114 Oocyte meiosis               3.784520e-03 -2.698128 3.784520e-03
+hsa00010 Glycolysis / Gluconeogenesis 8.961413e-03 -2.405398 8.961413e-03
+                                            q.val set.size         exp1
+hsa04110 Cell cycle                   0.001448312      121 8.995727e-06
+hsa03030 DNA replication              0.007586381       36 9.424076e-05
+hsa03013 RNA transport                0.073840037      144 1.375901e-03
+hsa03440 Homologous recombination     0.121861535       28 3.066756e-03
+hsa04114 Oocyte meiosis               0.121861535      102 3.784520e-03
+hsa00010 Glycolysis / Gluconeogenesis 0.212222694       53 8.961413e-03</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pathview</span>(<span class="at">gene.data=</span>foldchanges, <span class="at">pathway.id=</span><span class="st">"hsa04110"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>'select()' returned 1:1 mapping between keys and columns</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Info: Working in directory /Users/sejalpatel/Desktop/BIMM 143/Class 14</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Info: Writing image file hsa04110.pathview.png</code></pre>
+</div>
+</div>
+<p><img src="hsa04110.pathview.png" class="img-fluid"></p>
+</section>
+<section id="volcano-plot" class="level2">
+<h2 class="anchored" data-anchor-id="volcano-plot">Volcano Plot</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>( res<span class="sc">$</span>log2FoldChange, <span class="sc">-</span><span class="fu">log</span>(res<span class="sc">$</span>padj) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="RNASeq-Miniproject_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Adding Color</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>mycols <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="st">"gray"</span>, <span class="fu">nrow</span>(res))</span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a>mycols[ <span class="fu">abs</span>(res<span class="sc">$</span>log2FoldChange) <span class="sc">&gt;</span> <span class="dv">2</span> ]  <span class="ot">&lt;-</span> <span class="st">"red"</span> </span>
+<span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb77-4"><a href="#cb77-4" aria-hidden="true" tabindex="-1"></a>inds <span class="ot">&lt;-</span> (res<span class="sc">$</span>padj <span class="sc">&lt;</span> <span class="fl">0.01</span>) <span class="sc">&amp;</span> (<span class="fu">abs</span>(res<span class="sc">$</span>log2FoldChange) <span class="sc">&gt;</span> <span class="dv">2</span> )</span>
+<span id="cb77-5"><a href="#cb77-5" aria-hidden="true" tabindex="-1"></a>mycols[ inds ] <span class="ot">&lt;-</span> <span class="st">"blue"</span></span>
+<span id="cb77-6"><a href="#cb77-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb77-7"><a href="#cb77-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb77-8"><a href="#cb77-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>( res<span class="sc">$</span>log2FoldChange, <span class="sc">-</span><span class="fu">log</span>(res<span class="sc">$</span>padj), <span class="at">col=</span>mycols, <span class="at">xlab=</span><span class="st">"Log2(FoldChange)"</span>, <span class="at">ylab=</span><span class="st">"-Log(P-value)"</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="RNASeq-Miniproject_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pathview</span>(<span class="at">gene.data=</span>foldchanges, <span class="at">pathway.id=</span><span class="st">"hsa04110"</span>, <span class="at">kegg.native=</span><span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>'select()' returned 1:1 mapping between keys and columns</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: reconcile groups sharing member nodes!</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2] 
+[1,] "9"  "300"
+[2,] "9"  "306"</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Info: Working in directory /Users/sejalpatel/Desktop/BIMM 143/Class 14</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Info: Writing image file hsa04110.pathview.pdf</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Focus on top 5 upregulated pathways here for demo purposes only</span></span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a>keggrespathways <span class="ot">&lt;-</span> <span class="fu">rownames</span>(keggres<span class="sc">$</span>greater)[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span>
+<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the 8 character long IDs part of each string</span></span>
+<span id="cb84-5"><a href="#cb84-5" aria-hidden="true" tabindex="-1"></a>keggresids <span class="ot">=</span> <span class="fu">substr</span>(keggrespathways, <span class="at">start=</span><span class="dv">1</span>, <span class="at">stop=</span><span class="dv">8</span>)</span>
+<span id="cb84-6"><a href="#cb84-6" aria-hidden="true" tabindex="-1"></a>keggresids</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "hsa04640" "hsa04630" "hsa00140" "hsa04142" "hsa04330"</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pathview</span>(<span class="at">gene.data=</span>foldchanges, <span class="at">pathway.id=</span>keggresids, <span class="at">species=</span><span class="st">"hsa"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>'select()' returned 1:1 mapping between keys and columns</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Info: Working in directory /Users/sejalpatel/Desktop/BIMM 143/Class 14</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Info: Writing image file hsa04640.pathview.png</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>'select()' returned 1:1 mapping between keys and columns</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Info: Working in directory /Users/sejalpatel/Desktop/BIMM 143/Class 14</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Info: Writing image file hsa04630.pathview.png</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>'select()' returned 1:1 mapping between keys and columns</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Info: Working in directory /Users/sejalpatel/Desktop/BIMM 143/Class 14</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Info: Writing image file hsa00140.pathview.png</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>'select()' returned 1:1 mapping between keys and columns</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Info: Working in directory /Users/sejalpatel/Desktop/BIMM 143/Class 14</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Info: Writing image file hsa04142.pathview.png</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Info: some node width is different from others, and hence adjusted!</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>'select()' returned 1:1 mapping between keys and columns</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Info: Working in directory /Users/sejalpatel/Desktop/BIMM 143/Class 14</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Info: Writing image file hsa04330.pathview.png</code></pre>
+</div>
+</div>
+<p><img src="hsa04640.pathview.png" class="img-fluid"> <img src="hsa04630.pathview.png" class="img-fluid"> <img src="hsa04142.pathview.png" class="img-fluid"> <img src="hsa04330.pathview.png" class="img-fluid"> <img src="hsa00140.pathview.png" class="img-fluid"></p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
